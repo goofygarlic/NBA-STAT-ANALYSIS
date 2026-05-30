@@ -2,7 +2,7 @@ import os
 
 # Season ranges, API delay
 START_YEAR = 2000
-END_YEAR = 2023
+END_YEAR = 2024
 NBA_API_DELAY = 0.65
 
 # Target accuracy of models
