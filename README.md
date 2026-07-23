@@ -6,6 +6,8 @@ Install all dependencies. `pip install nba_api pandas numpy scikit-learn xgboost
 
 Download this file from Kaggle. `https://www.kaggle.com/datasets/sumitrodatta/nba-aba-baa-stats`. Place into `data/raw/historical/`
 
+## How to run
+
 ### Collecting current season data:
 `cd src/collections`, run `run_all.py`
 
