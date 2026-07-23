@@ -9,10 +9,16 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.metrics import roc_auc_score
 
-sys.path.insert(0, "../collections/historical")
-from collections.historical.config_historical import PROCESSED_DIR, MODELS_DIR, TARGET_ROC_AUC
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../collections"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../collections/historical"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../features"))
 
-TRAINING_PATH = os.path.join(PROCESSED_DIR, "training_mvp.csv")
+
+from config import RAW_DIR, PROCESSED_DIR, SEASON, REQUEST_DELAY
+from config_historical import MODELS_DIR, TARGET_ROC_AUC
+from normalize import min_max
+
+TRAINING_PATH = r"C:\Users\karth\Desktop\Projects\NBA-STAT-ANALYSIS\data\processed\training_mvp.csv"
 MODEL_PATH = os.path.join(MODELS_DIR, "mvp_model.pkl")
 VALIDATION_SEASONS = 5 # keep the last 5 seasons for validation
 
@@ -125,13 +131,13 @@ def train(df: pd.DataFrame) -> tuple:
             print(f"\n[train_mvp] Accuracy gate not reached. Best: {best_auc:.4f}")
             print(f"[train_mvp] Proceeding with best model: {best_name}")
 
-        best_pipeline.fit(X, Y)
+    best_pipeline.fit(X, Y)
 
-        os.makedirs(MODELS_DIR, exist_ok=True)
-        joblib.dump({"pipeline": best_pipeline, "features": available}, MODEL_PATH)
-        print(f"[train_mvp] Model saved -> {MODEL_PATH}")
+    os.makedirs(MODELS_DIR, exist_ok=True)
+    joblib.dump({"pipeline": best_pipeline, "features": available}, MODEL_PATH)
+    print(f"[train_mvp] Model saved -> {MODEL_PATH}")
 
-        return best_pipeline, best_auc, available
+    return best_pipeline, best_auc, available
     
 # evaluating with historical data
 
@@ -157,13 +163,13 @@ def validate(df: pd.DataFrame, pipeline, features: list, n_seasons: int = VALIDA
         # real mvp winner
         actual_winner = season_df[season_df["MVP_WINNER"] == True]
         if actual_winner.empty:
-            actual_name = "NOT FOUND"
+            actual_name  = "NOT FOUND"
             actual_share = None
         else:
             actual_winner = actual_winner.iloc[0]
-            acutal_name = actual_winner["PLAYER_NAME"]
+            actual_name  = actual_winner["PLAYER_NAME"]
             actual_share = actual_winner["SHARE"]
-        
+
         correct = model_pick["PLAYER_NAME"] == actual_name
 
         # Model's ranking system
@@ -197,7 +203,7 @@ def validate(df: pd.DataFrame, pipeline, features: list, n_seasons: int = VALIDA
     print(f"Top-1 accuracy over {n_seasons} seasons: {accuracy:.0%}  "
           f"({int(results_df['CORRECT'].sum())}/{n_seasons} correct)\n")
  
-    out_path = os.path.join(PROCESSED_DIR, "mvp_validation_results.csv")
+    out_path = r"C:\Users\karth\Desktop\Projects\NBA-STAT-ANALYSIS\data\processed\mvp_validation_results.csv"
     results_df.to_csv(out_path, index=False)
     print(f"[validate] Full results -> {out_path}")
     return results_df
@@ -206,7 +212,7 @@ def main():
     print("=" * 50)
     print("MVP Likelihood — Training & Validation")
     print("=" * 50)
- 
+    
     df = pd.read_csv(TRAINING_PATH)
     print(f"[train_mvp] Loaded {len(df)} player-seasons, "
           f"{df['MVP_LABEL'].sum()} positive examples\n")

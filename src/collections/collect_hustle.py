@@ -1,16 +1,16 @@
 import time
 import os
 import pandas as pd
-from nba_api.stats.endpoints import leaguedashpthustle
+from nba_api.stats.endpoints import leaguehustlestatsplayer
 from config import SEASON, REQUEST_DELAY, RAW_DIR
 from cache import load_or_fetch
 
 def fetch_hustle():
     time.sleep(REQUEST_DELAY)
-    return leaguedashpthustle.LeagueDashPtHustle(
+    return leaguehustlestatsplayer.LeagueHustleStatsPlayer(
         season=SEASON,
         league_id_nullable="00",
-        per_mode_time_nullable="PerGame",
+        per_mode_time="PerGame",
     ).get_data_frames()[0]
 
 def collect_hustle_stats() -> pd.DataFrame:

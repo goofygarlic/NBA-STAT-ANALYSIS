@@ -1,18 +1,30 @@
 import time
 import os
 import pandas as pd
-from nba_api.stats.endpoints import playerdashbordbygeneralsplits
+from nba_api.stats.endpoints import playerdashboardbygeneralsplits
 from config import SEASON, REQUEST_DELAY, CACHE_DIR, RAW_DIR
 
 def fetch_player_on_off(player_id: int) -> pd.DataFrame:
+    print(f"  fetching player {player_id}...")
     time.sleep(REQUEST_DELAY)
-    splits = playerdashbordbygeneralsplits.PlayerDashboardByGeneralSplits(
-        player_id = player_id,
-        season = SEASON,
-        measure_type_simple_nullable="Advanced",
+    splits = playerdashboardbygeneralsplits.PlayerDashboardByGeneralSplits(
+        player_id=player_id,
+        season=SEASON,
+        measure_type_detailed="Advanced",
+        season_type_playoffs="Regular Season",
+        per_mode_detailed="PerGame",
     ).get_data_frames()
 
-    return splits[1] if len(splits) > 1 else pd.DataFrame() # splits[1] contains on/off data
+    print(f"  total tables returned: {len(splits)}")
+    for i, df in enumerate(splits):
+        if df.empty:
+            print(f"  table {i}: empty")
+        elif "GROUP_SET" in df.columns:
+            print(f"  table {i}: GROUP_SET = {df['GROUP_SET'].unique()}, rows = {len(df)}")
+        else:
+            print(f"  table {i}: columns = {df.columns.tolist()[:5]}, rows = {len(df)}")
+
+    return pd.DataFrame()
 
 def collect_on_off(player_ids: list) -> pd.DataFrame:
     os.makedirs(CACHE_DIR, exist_ok=True)
@@ -40,4 +52,4 @@ def collect_on_off(player_ids: list) -> pd.DataFrame:
     out = os.path.join(RAW_DIR, "on_off_splits.csv")
     combined.to_csv(out, index=False)
     print(f"[on_off] Written -> {out}")
-    return combined            
+    return combined

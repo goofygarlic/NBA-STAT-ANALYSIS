@@ -9,10 +9,10 @@ NBA_API_DELAY = 0.65
 TARGET_ROC_AUC = 0.90
 
 # Directories
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
+BASE_DIR = r"C:\Users\karth\Desktop\Projects\NBA-STAT-ANALYSIS"
 RAW_HIST_DIR = os.path.join(BASE_DIR, "data/raw/historical")
 CACHE_HIST_DIR = os.path.join(BASE_DIR, "data/cache/historical")
-PROCESSED_DIR = os.path.join(BASE_DIR, "/data/processed")
+PROCESSED_DIR = os.path.join(BASE_DIR, "data/processed")
 MODELS_DIR = os.path.join(BASE_DIR, "outputs/models")
 
 # Kaggle Voting file (need to combine all of these)

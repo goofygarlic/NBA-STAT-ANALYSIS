@@ -2,9 +2,13 @@ import os
 import pandas as pd
 from config_historical import (KAGGLE_VOTING_PATH, RAW_HIST_DIR, end_year_to_nba_api, START_YEAR, END_YEAR)
 
-MVP_LABELS_PATH = os.path.join(RAW_HIST_DIR, "mvp_labels.csv")
+MVP_LABELS_PATH = os.path.join(RAW_HIST_DIR, "mvp_award_shares.csv")
 
-def load_mvp_labels() -> pd.DataFrame:
+def load_all_mvp_labels() -> pd.DataFrame:
+    if os.path.exists(MVP_LABELS_PATH):
+        print("[mvp_labels] Loading from previously generated mvp_labels.csv")
+        return pd.read_csv(MVP_LABELS_PATH)
+    
     if not os.path.exists(KAGGLE_VOTING_PATH):
         raise FileNotFoundError(
             f"\n[mvp_labels] Voting file not found at:\n"

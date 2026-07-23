@@ -19,8 +19,8 @@ def fetch_standard(): # fetches regular stats
         leaguedashplayerstats.LeagueDashPlayerStats,
         season=SEASON,
         season_type_all_star=SEASON_TYPE,
-        measure_type_simple_nullable="Base",
-        per_mode_simple="PerGame",
+        measure_type_detailed_defense="Base",
+        per_mode_detailed="PerGame",
     )
 
 def fetch_advanced(): # fetches advanced stats
@@ -28,8 +28,8 @@ def fetch_advanced(): # fetches advanced stats
         leaguedashplayerstats.LeagueDashPlayerStats,
         season=SEASON,
         season_type_all_star=SEASON_TYPE,
-        measure_type_simple_nullable="Advanced",
-        per_mode_simple="PerGame",
+        measure_type_detailed_defense="Advanced",
+        per_mode_detailed="PerGame",
     )
 
 def fetch_clutch(): # fetches clutch stats (the final 5 minutes of the 4th quarter or overtime when the score is within 5 points)
@@ -37,8 +37,8 @@ def fetch_clutch(): # fetches clutch stats (the final 5 minutes of the 4th quart
         leaguedashplayerclutch.LeagueDashPlayerClutch,
         season=SEASON,
         season_type_all_star=SEASON_TYPE,
-        measure_type_simple_nullable="Advanced",
-        per_mode_simple="PerGame",
+        measure_type_detailed_defense="Advanced",
+        per_mode_detailed="PerGame",
     )
 
 

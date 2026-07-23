@@ -12,7 +12,7 @@ def fetch_team_standard(): # fetches regular stats for team
     return leaguedashteamstats.LeagueDashTeamStats(
         season=SEASON,
         season_type_all_star=SEASON_TYPE,
-        measure_type_simple_nullable="Base",
+        measure_type_detailed_defense="Base",
     ).get_data_frames()[0]
 
 def fetch_team_advanced(): # fetches advanced stats for team
@@ -20,7 +20,7 @@ def fetch_team_advanced(): # fetches advanced stats for team
     return leaguedashteamstats.LeagueDashTeamStats(
         season=SEASON,
         season_type_all_star=SEASON_TYPE,
-        measure_type_simple_nullable="Advanced",
+        measure_type_detailed_defense="Advanced",
     ).get_data_frames()[0]
 
 

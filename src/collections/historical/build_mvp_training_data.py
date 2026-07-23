@@ -36,8 +36,8 @@ def fetch_season_stats(season: str) -> pd.DataFrame:
         adv = leaguedashplayerstats.LeagueDashPlayerStats(
             season=season,
             season_type_all_star="Regular Season",
-            measure_type_simple_nullable="Advanced",
-            per_mode_simple="PerGame",
+            measure_type_detailed_defense="Advanced",
+            per_mode_detailed="PerGame",
         ).get_data_frames()[0]
         
         time.sleep(NBA_API_DELAY)
@@ -45,13 +45,17 @@ def fetch_season_stats(season: str) -> pd.DataFrame:
         base = leaguedashplayerstats.LeagueDashPlayerStats(
             season=season,
             season_type_all_star="Regular Season",
-            measure_type_simple_nullable="Base",
-            per_mode_simple="PerGame",
+            measure_type_detailed_defense="Base",
+            per_mode_detailed="PerGame",
         ).get_data_frames()[0]
         
         # FOR WIN PERCENTAGE
         wp = base[["PLAYER_ID", "W_PCT"]].copy()
-        df = adv.merge(wp, on="PLAYER_ID", how="left")
+        df = adv.merge(base[["PLAYER_ID", "PTS", "REB", "AST", "W_PCT"]], on="PLAYER_ID", how="left")
+        if "W_PCT_y" in df.columns:
+            df = df.rename(columns={"W_PCT_y": "W_PCT"})
+        if "W_PCT_x" in df.columns:
+            df = df.drop(columns=["W_PCT_x"])
         df["SEASON"] = season
         
         df["PLAYER_NORM"] = df["PLAYER_NAME"].str.lower().str.strip()
@@ -85,6 +89,9 @@ def collect_historical_stats() -> pd.DataFrame:
 # Join stats + labels for training data :D
 
 def build_training_dataset(stats_df: pd.DataFrame, labels_df: pd.DataFrame) -> pd.DataFrame:
+    stats_df["PLAYER_NORM"] = stats_df["PLAYER_NAME"].str.lower().str.strip()
+    labels_df["PLAYER_NORM"] = labels_df["PLAYER_NAME"].str.lower().str.strip()
+    
     df = stats_df.merge(labels_df[["PLAYER_NORM", "SEASON", "SHARE", "MVP_WINNER"]], on=["PLAYER_NORM", "SEASON"], how="left")
     
     df["SHARE"] = df["SHARE"].fillna(0.0)

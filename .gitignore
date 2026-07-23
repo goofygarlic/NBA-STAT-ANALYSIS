@@ -5,3 +5,9 @@ env/
 
 # ignore data, people should get their own copy
 data/
+
+# ignore vscode settings
+.vscode/
+
+# ignore pycache
+__pycache__/

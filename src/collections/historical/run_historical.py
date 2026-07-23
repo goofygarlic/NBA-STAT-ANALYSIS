@@ -1,9 +1,9 @@
 import sys
 sys.path.insert(0, "../")
 
-from load_mvp_labels import load_all_mvp_labels
+from load_mvp_labels import load_all_mvp_labels, MVP_LABELS_PATH
 from build_mvp_training_data import collect_historical_stats, build_training_dataset
-from config_historical import RAW_HIST_DIR, MVP_LABELS_PATH
+from config_historical import RAW_HIST_DIR, PROCESSED_DIR
 
 import os
 import pandas as pd
@@ -21,6 +21,11 @@ def main():
     
     print("\n[historical] Step 3: Building training dataset...")
     training_df = build_training_dataset(stats_df, labels_df)
+    
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
+    out = os.path.join(PROCESSED_DIR, "training_mvp.csv")
+    training_df.to_csv(out, index=False)
+    print(f"[historical] Training data saved -> {out}")
     
     print("\n" + "=" * 50)
     print("Historical data collection complete.")

@@ -8,14 +8,15 @@ def main():
     print("NBA ANALYTICS: DATA COLLECTION STAGE")
     print("=" * 50)
 
-    players_df = collect_player_stats
-    teams_df = collect_team_stats
-    hustle_df = collect_hustle_stats
+    players_df = collect_player_stats()
+    teams_df = collect_team_stats()
+    hustle_df = collect_hustle_stats()
 
     player_ids = players_df["PLAYER_ID"].tolist()
     print(f"\n[run_all] Fetching on/off splits for {len(player_ids)} players...")
     print("[run_all] This will take several minutes due to rate limiting.\n")
-    on_off_df = collect_on_off(player_ids)
+    on_off_df = collect_on_off(player_ids[:1])
+
 
     print("\n" + "=" * 50)
     print("Collection complete.")
