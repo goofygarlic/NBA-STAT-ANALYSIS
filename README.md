@@ -17,3 +17,6 @@ Download this file from Kaggle. `https://www.kaggle.com/datasets/sumitrodatta/nb
 
 ### Current season scoring
 `score_current_season.py`
+
+### Notes
+Not fully operational on other machines, file saving issues are present. Output paths and input paths are hardcoded for now, will be fixing them.
